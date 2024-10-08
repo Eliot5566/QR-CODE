@@ -27,7 +27,9 @@
                 
                 // 傳送掃描結果給父頁面
                 //window.parent.postMessage(qrCodeMessage, "*");
-                window.parent.postMessage({ qrText: qrCodeMessage }, "*");
+                // window.parent.postMessage({ qrText: qrCodeMessage }, "*");
+                // 加上 type回傳
+                window.parent.postMessage({ type: 'qrText', qrText: qrCodeMessage }, "*");
 
                 // 停止掃描器，避免重複掃描
             html5QrCode.stop().then(() => {
@@ -36,7 +38,7 @@
             // 設置延遲1秒後關閉頁面，避免掃描成功後立即關閉頁面導致掃描結果無法傳遞
             setTimeout(() => {
                 window.close();
-            }, 1000);
+            }, 800);
            
              }).catch(err => {
             console.error("Failed to stop QR Code scanner.", err);
