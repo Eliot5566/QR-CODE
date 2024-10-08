@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <!-- 引入 html5-qrcode 的 CDN -->
+    <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+    <!-- QR Code 掃描框 -->
+    <div style="width: 500px;" id="reader"></div>
+    <script>
+        // 建立 QR CODE 掃描器
+        const html5QrCode = new Html5Qrcode("reader");
+        // 啟動掃描器
+        html5QrCode.start(
+            { facingMode: "environment" }, // 使用設備的後置相機
+            {
+                fps: 10,        // 每秒掃描10次
+                qrbox: 250      // 掃描框的大小
+            },
+            qrCodeMessage => {
+                // 掃描到 QR Code 時的處理邏輯
+                console.log(`QR Code detected: ${qrCodeMessage}`);
+                
+                // 傳送掃描結果給父頁面
+                window.parent.postMessage(qrCodeMessage, "*");
+                
+                // 停止掃描器，避免重複掃描
+                html5QrCode.stop();
+            },
+            errorMessage => {
+                // 當掃描過程中發生錯誤時的處理邏輯
+                console.log(`Error: ${errorMessage}`);
+            })
+            .then(_ => {
+                // 掃描器啟動成功
+                console.log("QR Code scanner has started.");
+            })
+            .catch(err => {
+                // 掃描器啟動失敗
+                console.log(`Error: ${err}`);
+            });
+
+        // 當網頁被卸載時，停止掃描器
+        window.addEventListener("beforeunload", () => {
+            html5QrCode.stop();
+        });
+    </script>
+
+</body>
+</html>
