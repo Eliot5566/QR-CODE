@@ -33,7 +33,11 @@
             html5QrCode.stop().then(() => {
             console.log("QR Code scanner stopped.");
             // 成功停止後關閉掃描頁面
-            window.close();  // 掃描成功後關閉頁面
+            // 設置延遲1秒後關閉頁面，避免掃描成功後立即關閉頁面導致掃描結果無法傳遞
+            setTimeout(() => {
+                window.close();
+            }, 1000);
+           
              }).catch(err => {
             console.error("Failed to stop QR Code scanner.", err);
             });
