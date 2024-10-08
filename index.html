@@ -26,8 +26,9 @@
                 console.log(`QR Code detected: ${qrCodeMessage}`);
                 
                 // 傳送掃描結果給父頁面
-                window.parent.postMessage(qrCodeMessage, "*");
-                
+                //window.parent.postMessage(qrCodeMessage, "*");
+                window.parent.postMessage({ qrText: qrCodeMessage }, "*");
+
                 // 停止掃描器，避免重複掃描
             html5QrCode.stop().then(() => {
             console.log("QR Code scanner stopped.");
