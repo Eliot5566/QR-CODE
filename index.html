@@ -29,8 +29,14 @@
                 window.parent.postMessage(qrCodeMessage, "*");
                 
                 // 停止掃描器，避免重複掃描
-                html5QrCode.stop();
-            },
+            html5QrCode.stop().then(() => {
+            console.log("QR Code scanner stopped.");
+            // 成功停止後關閉掃描頁面
+            window.close();  // 掃描成功後關閉頁面
+             }).catch(err => {
+            console.error("Failed to stop QR Code scanner.", err);
+            });
+         },
             errorMessage => {
                 // 當掃描過程中發生錯誤時的處理邏輯
                 console.log(`Error: ${errorMessage}`);
